@@ -1,9 +1,9 @@
-class NotesController < ApplicationController
+class Api::V1::NotesController < ApplicationController
   before_action :set_note, only: [:show, :update, :destroy]
 
   # GET /notes
   def index
-    @notes = Note.all
+    @notes = Note.all.order(id: :asc)
 
     render json: @notes
   end
@@ -18,7 +18,7 @@ class NotesController < ApplicationController
     @note = Note.new(note_params)
 
     if @note.save
-      render json: @note, status: :created, location: @note
+      render json: @note, status: :created #, location: @note
     else
       render json: @note.errors, status: :unprocessable_entity
     end
@@ -36,6 +36,8 @@ class NotesController < ApplicationController
   # DELETE /notes/1
   def destroy
     @note.destroy
+    json_str = {'message' => 'note successfully deleted'}.to_json
+    render json: json_str
   end
 
   private
