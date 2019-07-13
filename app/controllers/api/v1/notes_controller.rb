@@ -15,7 +15,15 @@ class Api::V1::NotesController < ApplicationController
 
   # POST /notes
   def create
-    @note = Note.new(note_params)
+    #@note = Note.new(note_params)
+    
+    id = params[:id]
+    title = params[:title]
+    noteText = params[:noteText]
+    coordinates = params[:coordinates]
+    picture = params[:picture]
+
+    @note = Note.new(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture)
 
     if @note.save
       render json: @note, status: :created #, location: @note
@@ -40,6 +48,24 @@ class Api::V1::NotesController < ApplicationController
     render json: json_str
   end
 
+  # POST /notes/add
+  def add
+    num1 = params[:num1].to_i
+    num2 = params[:num2].to_i
+    sum = num1+ num2
+    json_str = {'result' => 'the sum is '+sum.to_s}.to_json
+
+    render json: json_str
+  end
+
+  def flipnote
+    @note = Note.find(params[:id])
+    noteText = @note.noteText
+    revStr = noteText.reverse!
+    @note.noteText = revStr
+    render json: @note
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note
@@ -48,6 +74,6 @@ class Api::V1::NotesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def note_params
-      params.require(:note).permit(:id, :title, :noteText, :coordinates)
+      params.require(:note).permit(:id, :title, :noteText, :coordinates, :picture)
     end
 end
