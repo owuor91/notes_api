@@ -51,7 +51,7 @@ class Api::V1::NotesController < ApplicationController
   # DELETE /notes/1
   def destroy
     @note.destroy
-    json_str = {'message' => 'note successfully deleted'}.to_json
+    json_str = {'message' => 'note successfully deleted', "response_code" => 200}.to_json
     render json: json_str
   end
 
@@ -70,6 +70,8 @@ class Api::V1::NotesController < ApplicationController
     noteText = @note.noteText
     revStr = noteText.reverse!
     @note.noteText = revStr
+
+    @note.update(id: @note.id, title: @note.title, noteText: revStr)
     render json: @note
   end
 
