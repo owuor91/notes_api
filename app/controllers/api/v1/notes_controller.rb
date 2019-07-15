@@ -10,7 +10,13 @@ class Api::V1::NotesController < ApplicationController
 
   # GET /notes/1
   def show
-    render json: @note
+    if @note.nil?
+      json_str = { "message" => "Note with id #{params[:id]} not found", "response_code"=> 404}
+      render json_str
+    else
+        render json: @note
+    end
+
   end
 
   # POST /notes
