@@ -16,12 +16,13 @@ class Api::V1::NotesController < ApplicationController
   # POST /notes
   def create
     #@note = Note.new(note_params)
-    
+
     id = params[:id]
     title = params[:title]
     noteText = params[:noteText]
     coordinates = params[:coordinates]
     picture = params[:picture]
+
 
     @note = Note.new(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture)
 
@@ -34,7 +35,13 @@ class Api::V1::NotesController < ApplicationController
 
   # PATCH/PUT /notes/1
   def update
-    if @note.update(note_params)
+    id = params[:id]
+    title = params[:title]
+    noteText = params[:noteText]
+    coordinates = params[:coordinates]
+    picture = params[:picture]
+
+    if @note.update(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture) #note_params
       render json: @note
     else
       render json: @note.errors, status: :unprocessable_entity
