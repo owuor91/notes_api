@@ -60,7 +60,7 @@ POST https://akirachixnotesapi.herokuapp.com/api/v1/notes?title=Factory&noteText
 
 ###  Edit a Note
 
-`PUT https://akirachixnotesapi.herokuapp.com/api/v1/notes/160?title={title}&noteText={noteText}`
+`PUT https://akirachixnotesapi.herokuapp.com/api/v1/notes/{id}?title={title}&noteText={noteText}`
 ```
 EXAMPLE:
 PUT https://akirachixnotesapi.herokuapp.com/api/v1/notes/160?title=Factory Method&noteText=A method of designing factories
