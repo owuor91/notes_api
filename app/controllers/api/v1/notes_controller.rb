@@ -1,5 +1,6 @@
 class Api::V1::NotesController < ApplicationController
   before_action :set_note, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_request
 
   # GET /notes
   def index
