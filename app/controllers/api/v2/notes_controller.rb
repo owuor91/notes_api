@@ -3,37 +3,39 @@ class Api::V2::NotesController < ApplicationController
 
   # GET /notes
   def index
-    @notes = Note.all.order(id: :asc)
+    user = User.find(params[:user_id])
+    @notes = user.notes.order(id: :asc)
 
     render json: @notes
   end
 
   # GET /notes/1
   def show
-    if @note.nil?
-      json_str = { "message" => "Note with id #{params[:id]} not found", "response_code"=> 404}
-      render json: json_str
-    else
-        render json: @note
-    end
+    user_id = params[:user_id]
+    note_id = params[:id]
 
+    if @note = Note.find_by(user_id: user_id, id: note_id)
+      render json: @note
+    else
+      render json: {"message" => "Couldn't find note with id #{note_id}", "response_code"=>403}
+    end
   end
 
   # POST /notes
   def create
-    #@note = Note.new(note_params)
-
+  
     id = params[:id]
     title = params[:title]
     noteText = params[:noteText]
     coordinates = params[:coordinates]
     picture = params[:picture]
+    user_id = params[:user_id]
 
 
-    @note = Note.new(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture)
+    @note = Note.new(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture,user_id: user_id)
 
     if @note.save
-      render json: @note, status: :created #, location: @note
+      render json: @note, status: :created
     else
       render json: @note.errors, status: :unprocessable_entity
     end
@@ -46,8 +48,9 @@ class Api::V2::NotesController < ApplicationController
     noteText = params[:noteText]
     coordinates = params[:coordinates]
     picture = params[:picture]
+    user_id = params[:user_id]
 
-    if @note.update(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture) #note_params
+    if @note.update(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture, user_id: user_id)
       render json: @note
     else
       render json: @note.errors, status: :unprocessable_entity
@@ -89,6 +92,6 @@ class Api::V2::NotesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def note_params
-      params.require(:note).permit(:id, :title, :noteText, :coordinates, :picture)
+      params.require(:note).permit(:id, :title, :noteText, :coordinates, :picture, :user_id)
     end
 end

@@ -22,7 +22,7 @@ class Api::V2::UsersController < ApplicationController
       command = AuthenticateUser.call(params[:email], params[:password])
 
       if command.success?
-        render json: {message: 'registration successful' , auth_token: command.result }
+        render json: {message: 'registration successful', user_id: @user.id , auth_token: command.result }
       else
         render json: { error: command.errors }, status: :unauthorized
       end
