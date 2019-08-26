@@ -5,7 +5,8 @@ class Note < ApplicationRecord
     :bucket => ENV['BUCKET_NAME'],
     :access_key_id => ENV['ACCESS_KEY_ID'],
     :secret_access_key => ENV['SECRET_ACCESS_KEY'],
-      s3_region: ENV['AWS_REGION']
+      s3_region: ENV['AWS_REGION'],
+      s3_protocol: 'https'
   },
                     :bucket => "akirachixnotesapi"
   #validates_attachment :picture, presence: true
