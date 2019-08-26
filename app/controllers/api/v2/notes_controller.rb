@@ -23,7 +23,6 @@ class Api::V2::NotesController < ApplicationController
 
   # POST /notes
   def create
-  
     id = params[:id]
     title = params[:title]
     noteText = params[:noteText]
