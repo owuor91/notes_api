@@ -6,7 +6,11 @@ class Api::V2::NotesController < ApplicationController
     user = User.find(params[:user_id])
     @notes = user.notes.order(id: :asc)
 
-    @notes.each { |n| n.picture.slice!(0,2) if n.picture.present?}
+    @notes.each { |n|
+      picture = n.picture
+      picture = picture.slice(0.2) if picture.present?
+      n.picture = picture
+    }
 
     render json: @notes
   end
@@ -17,7 +21,6 @@ class Api::V2::NotesController < ApplicationController
     note_id = params[:id]
 
     if @note = Note.find_by(user_id: user_id, id: note_id)
-      @note.picture.slice!(0,2) if @note.picture.present?
       render json: @note
     else
       render json: {"message" => "Couldn't find note with id #{note_id}", "response_code"=>403}
@@ -37,7 +40,6 @@ class Api::V2::NotesController < ApplicationController
     @note = Note.new(id: id, title: title, noteText: noteText, coordinates: coordinates, picture: picture,user_id: user_id)
 
     if @note.save
-      @note.picture.slice!(0,2) if @note.picture.present?
       render json: @note, status: :created
     else
       render json: @note.errors, status: :unprocessable_entity
