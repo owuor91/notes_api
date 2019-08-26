@@ -16,7 +16,7 @@ class Api::V2::UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = User.new(name: params[:name], email: params[:email], password: params[:password])
+    @user = User.new(email: params[:email], password: params[:password])
 
     if @user.save
       command = AuthenticateUser.call(params[:email], params[:password])
